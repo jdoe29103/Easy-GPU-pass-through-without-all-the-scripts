@@ -1,4 +1,4 @@
-# Easy-GPU-Pass-through-without-all-the-scripts
+# Easy-GPU-pass-through-without-all-the-scripts
 
 I have yet to find a GPU pass-through guide that actually explains what you need to do and does not involve using a bunch of random OS and hardware specific scripts. These instructions are designed so that if you need you can search for OS or hardware specific information if you need as it is impossible to account for every configuration in one guide.
 
