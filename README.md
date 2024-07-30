@@ -36,7 +36,7 @@ The easiest way to to get around the nuances of passing through a GPU is to bind
 
 3. Next we need to set a kernel parameter that specifies which PCI devices will be handled by the VFIO PCI driver and gets passed to the kernel at boot. To do this run `sudo nano /etc/default/grub` (or using any editor of your choice)
 
-4. Find the line`GRUB_CMDLINE_LINUX_DEFAULT=`, and add the parameter `vfio-pci.ids=` followed by a common seperated list of all the device codes for your GPU. e.g. `GRUB_CMDLINE_LINUX_DEFAULT="vfio-pci.ids=10de:2482,10de:228b"`. Save and exit your editor.
+4. Find the line`GRUB_CMDLINE_LINUX_DEFAULT=`, and add the parameter `vfio-pci.ids=` followed by a comma seperated list of all the device codes for your GPU. e.g. `GRUB_CMDLINE_LINUX_DEFAULT="vfio-pci.ids=10de:2482,10de:228b"`. Save and exit your editor.
 
 5. Run `sudo grub-mkconfig -o /boot/grub/grub.cfg` to generate a new grub configuration file with the changes we just made.
 
