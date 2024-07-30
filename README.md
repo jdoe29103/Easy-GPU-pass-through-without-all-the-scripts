@@ -18,7 +18,7 @@ for g in /sys/kernel/iommu_groups/*; do
 done;
 ```
 
-**Part 1: Binding guest GPU to the VFIO driver on boot**
+# **Part 1: Binding guest GPU to the VFIO driver on boot**
 
 The easiest way to to get around the nuances of passing through a GPU is to bind the guest GPU to the VFIO driver (the driver that lets QEMU/KVM use it) at boot so that the regular GPU driver doesn't get a chance to. You do not have to do this on boot but those solutions are much more complext and less reliable.
 
@@ -63,7 +63,7 @@ The easiest way to to get around the nuances of passing through a GPU is to bind
 ```
 If you did everything correctly your GPU is ready to be passed to a virtual machine.
 
-**Part 2: Configuring a virtual machine**
+# **Part 2: Configuring a virtual machine**
 
 From this point on all you really need to do is setup a virtual machine to fit your needs outside of a few specific parameters you need when passing through a GPU.
 
@@ -79,7 +79,7 @@ From this point on all you really need to do is setup a virtual machine to fit y
 
 6. Dial
 
-**Pitfalls**
+# **Pitfalls**
 
 If you're like me and don't have one of the very few and expensive motherboards that have perfect IOMMU groupings you may find yourself having to use the first PCI slot for the guest GPU making it the "primary" GPU. If the primary GPU is grabbed by the vfio driver you may run into an issue where xorg won't start using the second GPU giving you no display. However, this is fixable.
 
