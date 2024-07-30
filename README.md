@@ -4,7 +4,7 @@ I have yet to find a GPU pass-through guide that actually explains what you need
 
 GPUs, unlike most devices cannot easily be let go of and grabed by other drivers. Therefor, GPU pass-through requires some extra configuration before configuring a virtual machine. This guide will be devided into two parts. Part 1, preping the guest GPU to be used for pass-through (the "hard" part) and Part 2, setting up the virtual machine (the "easy" part).
 
-This guide assumes you have a chipset with workable IOMMU groupings and virtualization options enabled in the BIOS of your system. This is different for every motherboard so you will need to refrence your manual for that. The GPU you plan to pass needs to be in its own IOMMU group. If your GPU does not have it's own IOMMU group try using a different PCI slot. If that doesn't work your last hope is using kernel patches to bypass this issue which is not covered in this guide. This guide also assumes you are on a Debian based system but will work with other distributions.
+This guide assumes you have a chipset with workable IOMMU groupings and virtualization options enabled in the BIOS of your system. This is different for every motherboard so you will need to reference your manual for that. The GPU you plan to pass needs to be in its own IOMMU group. If your GPU does not have it's own IOMMU group try using a different PCI slot. If that doesn't work your last hope is using kernel patches to bypass this issue which is not covered in this guide. This guide also assumes you are on a Debian based system but will work with other distributions.
 
 You can use this scrip to investigate your IOMMU groups if need be:
 ```
@@ -20,9 +20,9 @@ done;
 
 # **Part 1: Binding guest GPU to the VFIO driver on boot**
 
-The easiest way to to get around the nuances of passing through a GPU is to bind the guest GPU to the VFIO driver (the driver that lets QEMU/KVM use it) at boot so that the regular GPU driver doesn't get a chance to. You do not have to do this on boot but those solutions are much more complext and less reliable.
+The easiest way to to get around the nuances of passing through a GPU is to bind the guest GPU to the VFIO driver (the driver that lets QEMU/KVM use it) at boot so that the regular GPU driver doesn't get a chance to. You do not have to do this on boot but those solutions are more complex and less reliable.
 
-1. First we need to get some idintifying information about the GPU we are going to pass. Run `lspci -nn`. `lspci` lists all of the available PCI devices and the `-nn` argument shows us the PCI vendor and device codes which is what we are looking for. You can also use grep to narrow down the list e.g. `lspci -nn | grep "NVIDIA"` or `lspci -nn | grep "AMD`. You should get something like this:
+1. First we need to get some identifying information about the GPU we are going to pass. Run `lspci -nn`. `lspci` lists all of the available PCI devices and the `-nn` argument shows us the PCI vendor and device codes which is what we are looking for. You can also use grep to narrow down the list e.g. `lspci -nn | grep "NVIDIA"` or `lspci -nn | grep "AMD`. You should get something like this:
 ```
 03:00.0 VGA compatible controller [0300]: NVIDIA Corporation TU116 [GeForce GTX 1660 SUPER] [10de:21c4] (rev a1)
 03:00.1 Audio device [0403]: NVIDIA Corporation TU116 High Definition Audio Controller [10de:1aeb] (rev a1)
@@ -32,7 +32,7 @@ The easiest way to to get around the nuances of passing through a GPU is to bind
 07:00.1 Audio device [0403]: NVIDIA Corporation GA104 High Definition Audio Controller [10de:228b] (rev a1)
 ```
 
-2. From the list find the card you want to pass. Assuming your GPU was made in the last 20 years it should have at least a VGA controller and a sound card (Audio device). Some GPUs will have extra USB controllers as well. Copy the device codes (characters in brackets at the end) for every device assosiated with your GPU. e.g. `10de:2482` and `10de:228b` for the 3070 or `10de:21c4`, `10de:1aeb`,`10de:1aec`, and `10de:1aed` for the 1660.
+2. From the list find the card you want to pass. Assuming your GPU was made in the last 20 years it should have at least a VGA controller and a sound card (Audio device). Some GPUs will have extra USB controllers as well. Copy the device codes (characters in brackets at the end) for every device associated with your GPU. e.g. `10de:2482` and `10de:228b` for the 3070 or `10de:21c4`, `10de:1aeb`,`10de:1aec`, and `10de:1aed` for the 1660.
 
 3. Next we need to set a kernel parameter that specifies which PCI devices will be handled by the VFIO PCI driver and gets passed to the kernel at boot. To do this run `sudo nano /etc/default/grub` (or using any editor of your choice)
 
